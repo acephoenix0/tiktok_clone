@@ -70,7 +70,7 @@ class InterestsScreen extends StatelessWidget {
                 'Get better video recommendations',
                 style: TextStyle(
                   fontSize: Sizes.size20,
-                ),
+                ), 
               ),
               Gaps.v64,
               Wrap(
