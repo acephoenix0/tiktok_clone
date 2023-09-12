@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
@@ -49,15 +50,31 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onPanUpdate: _onPanUpdate,
-        onPanEnd: _onPanEnd,
-        child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.size24,
+    return GestureDetector(
+      onPanUpdate: _onPanUpdate,
+      onPanEnd: _onPanEnd,
+      child: Scaffold(
+        bottomNavigationBar: BottomAppBar(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: Sizes.size24,
+            horizontal: Sizes.size24,
+          ),
+          child: AnimatedOpacity(
+            opacity: _showingPage == Page.first ? 0 : 1,
+            duration: const Duration(milliseconds: 500),
+            child: CupertinoButton(
+              color: Theme.of(context).primaryColor,
+              onPressed: () {},
+              child: const Text('Enter the app!'),
             ),
+          ),
+        )),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.size24,
+          ),
+          child: SafeArea(
             child: AnimatedCrossFade(
               firstChild: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +110,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   ),
                   Gaps.v20,
                   Text(
-                    'Videos are personalized for you based on what you watch, like, and share.',
+                    'Take care of one another. Plis!',
                     style: TextStyle(
                       fontSize: Sizes.size20,
                       //fontWeight: FontWeight.w700,
