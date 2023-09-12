@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/main_navigation/main_navigation_screen.dart';
+import 'package:tiktok_clone/features/videos/video_screen.dart';
 
 enum Direction { right, left }
 
@@ -48,6 +50,15 @@ class _TutorialScreenState extends State<TutorialScreen> {
     }
   }
 
+  void _onEnterAppTap() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const MainNavigationScreen(),
+        ), (route) {
+      return false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -63,10 +74,13 @@ class _TutorialScreenState extends State<TutorialScreen> {
           child: AnimatedOpacity(
             opacity: _showingPage == Page.first ? 0 : 1,
             duration: const Duration(milliseconds: 500),
-            child: CupertinoButton(
-              color: Theme.of(context).primaryColor,
-              onPressed: () {},
-              child: const Text('Enter the app!'),
+            child: GestureDetector(
+              onTap: _onEnterAppTap,
+              child: CupertinoButton(
+                color: Theme.of(context).primaryColor,
+                onPressed: () {},
+                child: const Text('Enter the app!'),
+              ),
             ),
           ),
         )),
