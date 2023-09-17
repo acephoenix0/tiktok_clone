@@ -43,7 +43,7 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
       itemCount: _itemCount,
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
-        return VideoPost(onVideoFinished: _onVideoFinished);
+        return VideoPost(onVideoFinished: _onVideoFinished, index: index);
       },
     );
   }

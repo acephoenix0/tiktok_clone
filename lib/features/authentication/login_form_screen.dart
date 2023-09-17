@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
@@ -25,7 +26,9 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
             builder: (context) => const InterestsScreen(),
           ),
           (route) {
-            print(route);
+            if (kDebugMode) {
+              print(route);
+            }
             return false;
           },
         );
