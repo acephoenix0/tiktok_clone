@@ -29,8 +29,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
   void _onSearchSubmitted(String value) {}
 
-  void _onTap(int value) {}
-
   @override
   void dispose() {
     _textEditingController.dispose();
