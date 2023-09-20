@@ -13,6 +13,11 @@ class ActivityScreen extends StatefulWidget {
 class _ActivityScreenState extends State<ActivityScreen> {
   final List<String> _notifications = List.generate(20, (index) => '${index}h');
 
+  void _onDismissed(String notification) {
+    _notifications.remove(notification);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +41,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
           for (var notification in _notifications)
             Dismissible(
               key: Key(notification),
+              onDismissed: (direction) => _onDismissed(notification),
               background: Container(
                 alignment: Alignment.centerLeft,
                 color: Colors.green,
