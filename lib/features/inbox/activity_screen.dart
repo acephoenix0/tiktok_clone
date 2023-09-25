@@ -41,6 +41,8 @@ class _ActivityScreenState extends State<ActivityScreen>
     }
   ];
 
+  bool _showBarrier = false;
+
   late final AnimationController _animationController = AnimationController(
     vsync: this,
     duration: const Duration(
@@ -48,9 +50,19 @@ class _ActivityScreenState extends State<ActivityScreen>
     ),
   );
 
-  late final Animation<double> _animation = Tween(
+  late final Animation<double> _arrowAnimation = Tween(
     begin: 0.0,
     end: 0.5,
+  ).animate(_animationController);
+
+  late final Animation<Offset> _panelAnimation = Tween(
+    begin: const Offset(0, -1),
+    end: Offset.zero,
+  ).animate(_animationController);
+
+  late final Animation<Color?> _barrierAnimation = ColorTween(
+    begin: Colors.transparent,
+    end: Colors.black38,
   ).animate(_animationController);
 
   void _onDismissed(String notification) {
@@ -58,12 +70,15 @@ class _ActivityScreenState extends State<ActivityScreen>
     setState(() {});
   }
 
-  void _onTitleTap() {
+  void _toggleAnimations() async {
     if (_animationController.isCompleted) {
-      _animationController.reverse();
+      await _animationController.reverse();
     } else {
       _animationController.forward();
     }
+    setState(() {
+      _showBarrier = !_showBarrier;
+    });
   }
 
   @override
@@ -72,18 +87,24 @@ class _ActivityScreenState extends State<ActivityScreen>
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-          onTap: _onTitleTap,
+          onTap: _toggleAnimations,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text('All activity'),
               Gaps.h2,
               RotationTransition(
-                turns: _animation,
+                turns: _arrowAnimation,
                 child: const FaIcon(
                   FontAwesomeIcons.chevronDown,
                   size: Sizes.size14,
@@ -189,41 +210,50 @@ class _ActivityScreenState extends State<ActivityScreen>
                 ),
             ],
           ),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(
-                  Sizes.size4,
-                ),
-                bottomRight: Radius.circular(
-                  Sizes.size4,
+          if (_showBarrier)
+            AnimatedModalBarrier(
+              color: _barrierAnimation,
+              dismissible: true,
+              onDismiss: _toggleAnimations,
+            ),
+          SlideTransition(
+            position: _panelAnimation,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(
+                    Sizes.size4,
+                  ),
+                  bottomRight: Radius.circular(
+                    Sizes.size4,
+                  ),
                 ),
               ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var tab in _tabs)
-                  ListTile(
-                    title: Row(
-                      children: [
-                        FaIcon(
-                          tab['icon'],
-                          color: Colors.black,
-                          size: Sizes.size16,
-                        ),
-                        Gaps.h20,
-                        Text(
-                          tab['title'],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (var tab in _tabs)
+                    ListTile(
+                      title: Row(
+                        children: [
+                          FaIcon(
+                            tab['icon'],
+                            color: Colors.black,
+                            size: Sizes.size16,
                           ),
-                        ),
-                      ],
+                          Gaps.h20,
+                          Text(
+                            tab['title'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
